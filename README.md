@@ -2,6 +2,12 @@
 
 Another [self-hosted](https://help.github.com/en/github/automating-your-workflow-with-github-actions/hosting-your-own-runners) Github actions runner.
 
+## Goals
+
+- Auto register and remove
+- Support organization level runners
+- Support runner self-update
+
 ## Usage
 
 ### Using executable (with CLI args)
@@ -48,3 +54,10 @@ test             Runs go test
 install-tools    Install tools
 help             Shows this help message
 ```
+
+## Authors and Acknowledgement
+
+### Inspiration
+
+- [summerwind/actions-runner-controller](https://github.com/summerwind/actions-runner-controller)
+
