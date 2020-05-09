@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
 
       - name: Setup Go
@@ -26,3 +26,25 @@ jobs:
 
       - name: Lint
         run: make lint
+
+  dockerize:
+    name: dockerize
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build Docker
+        uses: docker/build-push-action@v1
+        env:
+          DOCKER_BUILDKIT: 1
+          RUNNER_VERSION: 2.169.1
+          DOCKER_VERSION: 19.03.8
+        with:
+          repository: aweris/gar
+          build_args: RUNNER_VERSION=${{ env.RUNNER_VERSION }},DOCKER_VERSION=${{ env.DOCKER_VERSION }}
+          add_git_labels: true
+          tags: ${{ env.RUNNER_VERSION }}
+          push: false
