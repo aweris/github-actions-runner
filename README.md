@@ -21,6 +21,7 @@ Usage of gar:
       --replace               Replace any existing runner with the same name (default true)
       --runner-path string    Path of the local runner installation (default "/runner")
       --url string            Repository or Organization url for runner registration
+      --version               Prints version info
       --work-dir string       Working directory for the runner (default "/_work")
 ```
 

@@ -17,6 +17,12 @@ import (
 )
 
 var (
+	// version flags
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+
+	// Errors
 	ErrMissingParameter = errors.New("missing parameter")
 )
 
@@ -33,12 +39,16 @@ func main() {
 		workDir      string
 		name         string
 		runnerLabels []string
+
+		// other
+		showVersion bool
 	)
 
 	// github client flags
 	pflag.StringVar(&ghToken, "github-token", "", "Personal access token for authenticate to GitHub")
 
 	// runner flags
+	pflag.BoolVar(&showVersion, "version", false, "Prints version info")
 	pflag.BoolVar(&replace, "replace", true, "Replace any existing runner with the same name")
 	pflag.BoolVar(&once, "once", false, "Runner executes only single job")
 	pflag.StringVar(&url, "url", "", "Repository or Organization url for runner registration")
@@ -54,6 +64,13 @@ func main() {
 	bindEnv(pflag.Lookup("name"), "RUNNER_NAME")
 
 	pflag.Parse()
+
+	if showVersion {
+		fmt.Printf("Version    : %s\n", version)
+		fmt.Printf("Git Commit : %s\n", commit)
+		fmt.Printf("Build Date : %s\n", date)
+		os.Exit(0)
+	}
 
 	// merge arg and env labels
 	if labels := os.Getenv("RUNNER_LABELS"); len(labels) > 0 {
