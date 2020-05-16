@@ -19,7 +19,7 @@ jobs:
         uses: docker/build-push-action@v1
         env:
           DOCKER_BUILDKIT: 1
-          RUNNER_VERSION: 2.169.1
+          RUNNER_VERSION: 2.262.1
           DOCKER_VERSION: 19.03.8
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
