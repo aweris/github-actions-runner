@@ -3,10 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/aweris/github-actions-runner/runner"
-	"github.com/google/go-github/v31/github"
-	"github.com/pkg/errors"
-	"golang.org/x/oauth2"
 	"log"
 	"net/http"
 	"os"
@@ -15,8 +11,13 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/aweris/github-actions-runner/runner"
 	"github.com/bradleyfalzon/ghinstallation"
+	"github.com/google/go-github/v31/github"
+	"github.com/pkg/errors"
 	"github.com/spf13/pflag"
+
+	"golang.org/x/oauth2"
 )
 
 var (
