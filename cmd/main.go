@@ -8,12 +8,14 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/oauth2"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
 	"time"
 
+	"github.com/bradleyfalzon/ghinstallation"
 	"github.com/spf13/pflag"
 )
 
@@ -30,7 +32,10 @@ var (
 func main() {
 	var (
 		// github client flags
-		ghToken string
+		ghToken             string // github personal access token
+		ghAppID             int64  // github application id
+		ghAppInstallationID int64  // github application installation id
+		ghAppPrivateKeyPath string // github application key path
 
 		// runner flags
 		replace      bool
@@ -47,6 +52,9 @@ func main() {
 
 	// github client flags
 	pflag.StringVar(&ghToken, "github-token", "", "Personal access token for authenticate to GitHub")
+	pflag.Int64Var(&ghAppID, "github-app-id", 0, "Github application ID")
+	pflag.Int64Var(&ghAppInstallationID, "github-app-installation-id", 0, "Installation ID for the Github application")
+	pflag.StringVar(&ghAppPrivateKeyPath, "github-app-private-key", "", "The path of a private key file to authenticate as a GitHub App")
 
 	// runner flags
 	pflag.BoolVar(&showVersion, "version", false, "Prints version info")
@@ -59,6 +67,9 @@ func main() {
 	pflag.StringArrayVarP(&runnerLabels, "labels", "l", make([]string, 0), "Custom labels for the runner")
 
 	bindEnv(pflag.Lookup("github-token"), "GITHUB_TOKEN")
+	bindEnv(pflag.Lookup("github-app-id"), "GITHUB_APP_ID")
+	bindEnv(pflag.Lookup("github-app-installation-id"), "GITHUB_APP_INSTALLATION_ID")
+	bindEnv(pflag.Lookup("github-app-private-key"), "GITHUB_APP_PRIVATE_KEY_PATH")
 	bindEnv(pflag.Lookup("url"), "REG_URL")
 	bindEnv(pflag.Lookup("path"), "RUNNER_PATH")
 	bindEnv(pflag.Lookup("path"), "RUNNER_WORKDIR")
@@ -78,9 +89,31 @@ func main() {
 		runnerLabels = append(runnerLabels, strings.Split(labels, ",")...)
 	}
 
-	client, err := NewClientWithAccessToken(ghToken)
-	if err != nil {
-		log.Fatalf("failed to create GitHub client: %v\n", err)
+	if ghToken == "" && ghAppID == 0 {
+		log.Fatal("please provide personal access token or github application credentials")
+	}
+
+	var client *github.Client
+	var err error
+
+	if ghToken != "" {
+		client, err = NewClientWithAccessToken(ghToken)
+		if err != nil {
+			log.Fatalf("failed to create GitHub client: %v\n", err)
+		}
+	} else {
+		if ghAppInstallationID == 0 {
+			log.Fatal("missing application installation id")
+		}
+
+		if ghAppPrivateKeyPath == "" {
+			log.Fatal("missing application private key path")
+		}
+
+		client, err = NewClient(ghAppID, ghAppInstallationID, ghAppPrivateKeyPath)
+		if err != nil {
+			log.Fatalf("failed to create GitHub client: %v\n", err)
+		}
 	}
 
 	tp, err := runner.NewTokenProvider(url, client)
@@ -139,6 +172,16 @@ func NewClientWithAccessToken(token string) (*github.Client, error) {
 	))
 
 	return github.NewClient(tc), nil
+}
+
+// NewClient returns a client authenticated as a GitHub App.
+func NewClient(appID, installationID int64, privateKeyPath string) (*github.Client, error) {
+	tr, err := ghinstallation.NewKeyFromFile(http.DefaultTransport, appID, installationID, privateKeyPath)
+	if err != nil {
+		return nil, fmt.Errorf("authentication failed: %v", err)
+	}
+
+	return github.NewClient(&http.Client{Transport: tr}), nil
 }
 
 func bindEnv(fn *pflag.Flag, env string) {
