@@ -61,7 +61,7 @@ func main() {
 	bindEnv(pflag.Lookup("github-token"), "GITHUB_TOKEN")
 	bindEnv(pflag.Lookup("url"), "REG_URL")
 	bindEnv(pflag.Lookup("path"), "RUNNER_PATH")
-	bindEnv(pflag.Lookup("path"), "RUNNER_WORKDIR")
+	bindEnv(pflag.Lookup("work-dir"), "RUNNER_WORKDIR")
 	bindEnv(pflag.Lookup("name"), "RUNNER_NAME")
 
 	pflag.Parse()
