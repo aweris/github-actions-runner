@@ -73,7 +73,7 @@ func main() {
 	bindEnv(pflag.Lookup("github-app-private-key"), "GITHUB_APP_PRIVATE_KEY_PATH")
 	bindEnv(pflag.Lookup("url"), "REG_URL")
 	bindEnv(pflag.Lookup("path"), "RUNNER_PATH")
-	bindEnv(pflag.Lookup("path"), "RUNNER_WORKDIR")
+	bindEnv(pflag.Lookup("work-dir"), "RUNNER_WORKDIR")
 	bindEnv(pflag.Lookup("name"), "RUNNER_NAME")
 
 	pflag.Parse()
