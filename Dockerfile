@@ -38,6 +38,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update \
  && apt-get install -y --no-install-recommends software-properties-common \
  && add-apt-repository -y ppa:git-core/ppa \
+ && add-apt-repository ppa:rmescandon/yq \
  && apt-get update \
  && apt-get install -y --no-install-recommends build-essential \
                                                curl \
@@ -64,6 +65,10 @@ RUN apt-get update \
                                                wget \
                                                zip \
                                                zstd \
+                                               gnupg \
+                                               gnupg-agent \
+                                               python3-pip \
+                                               yq \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
