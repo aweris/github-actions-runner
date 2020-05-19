@@ -97,6 +97,13 @@ func (r *Runner) register() error {
 
 	if len(config.WorkDir) > 0 {
 		args = append(args, "--work", config.WorkDir)
+
+		// When workdir not exist, runner creates directory with root user
+		// but when you use different user then root, it's getting permission error
+		// For work around this issue we make sure directory exist with correct permissions
+		if _, err := os.Stat(config.WorkDir); os.IsNotExist(err) {
+			_ = os.Mkdir(config.WorkDir, os.ModePerm)
+		}
 	}
 
 	if config.Replace {
