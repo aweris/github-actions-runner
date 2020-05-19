@@ -68,6 +68,8 @@ RUN apt-get update \
                                                gnupg \
                                                gnupg-agent \
                                                python3-pip \
+                                               python3-setuptools \
+                                               python3-wheel \
                                                yq \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
