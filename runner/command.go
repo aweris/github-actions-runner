@@ -2,11 +2,16 @@ package runner
 
 import (
 	"context"
+	"github.com/sirupsen/logrus"
 	"io"
 	"os"
 	"os/exec"
 
 	"github.com/pkg/errors"
+)
+
+const (
+	AutoUpdateExitCode int = 3
 )
 
 // Command is a simple wrapper for exec.CommandContext
@@ -42,7 +47,19 @@ func (c *Command) Run(ctx context.Context, args ...string) error {
 	cmd.Stderr = c.stderr
 	cmd.Env = os.Environ()
 
-	return cmd.Run()
+	if err := cmd.Run(); err != nil {
+		if exitError, ok := err.(*exec.ExitError); ok {
+			// Exit code 3 means auto update for runner
+			if exitError.ExitCode() == AutoUpdateExitCode {
+				logrus.Warningln("!!!! Runner Auto Upgrade !!!!")
+				return c.Run(ctx, args...)
+			}
+		}
+
+		return err
+	}
+
+	return nil
 }
 
 func isExecAny(mode os.FileMode) bool {
