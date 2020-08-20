@@ -33,7 +33,7 @@ type Runner struct {
 // NewRunner returns new Runner instance
 func NewRunner(config *Config) (*Runner, error) {
 	// Configure runner
-	runCmd, err := NewCommand(path.Join(config.Path, "run.sh"), os.Stdout, os.Stderr)
+	runCmd, err := NewCommand(path.Join(config.Path, "bin/runsvc.sh"), os.Stdout, os.Stderr)
 	if err != nil {
 		return nil, err
 	}
