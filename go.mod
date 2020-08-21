@@ -1,6 +1,6 @@
 module github.com/aweris/github-actions-runner
 
-go 1.14
+go 1.15
 
 require (
 	github.com/bradleyfalzon/ghinstallation v1.1.1
