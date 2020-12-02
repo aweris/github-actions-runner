@@ -67,6 +67,7 @@ RUN apt-get update \
                                                zstd \
                                                gnupg \
                                                gnupg-agent \
+                                               python3-venv \
                                                python3-pip \
                                                python3-setuptools \
                                                python3-wheel \
