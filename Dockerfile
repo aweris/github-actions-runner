@@ -78,6 +78,7 @@ RUN apt-get update \
                                                yq \
                                                nodejs \
                                                yarn \
+                                               xvfb \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
