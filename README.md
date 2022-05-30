@@ -16,7 +16,7 @@ Another [self-hosted](https://help.github.com/en/github/automating-your-workflow
 ### Docker 
 
 ```
-docker run aweris/gar:2.263.0 --github-token <pat> --url https://github.com/<your-repo-goes-here>
+docker run aweris/gar:2.292.0 --github-token <pat> --url https://github.com/<your-repo-goes-here>
 ```
 
 ### Helm Chart
