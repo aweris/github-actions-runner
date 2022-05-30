@@ -35,8 +35,8 @@ jobs:
         uses: docker/build-push-action@v1
         env:
           DOCKER_BUILDKIT: 1
-          RUNNER_VERSION: 2.277.1
-          DOCKER_VERSION: 19.03.8
+          RUNNER_VERSION: 2.292.0
+          DOCKER_VERSION: 20.10.16
         with:
           repository: aweris/gar
           build_args: RUNNER_VERSION=${{ env.RUNNER_VERSION }},DOCKER_VERSION=${{ env.DOCKER_VERSION }}
