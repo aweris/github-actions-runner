@@ -16,7 +16,7 @@ COPY . .
 
 RUN make gar
 
-FROM ubuntu:20.04
+FROM ubuntu:22.10
 
 # Build ARGS
 ARG RUNNER_VERSION
